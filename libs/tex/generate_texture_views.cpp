@@ -83,10 +83,11 @@ from_images_and_camera_files(std::string const & path,
 
         /* Find corresponding image file. */
         int step = 1;
-        for (std::size_t j = i + 1; ; j += step) {
+        for (std::size_t j = i + 1; j < dir.size(); j += step) {
+            util::fs::File const & img_file = dir[j];
 
             /* Since the files are sorted we can break - no more files with the same prefix exist. */
-            if (j >= dir.size() || util::string::left(dir[j].name, prefix.size()) != prefix) {
+            if (util::string::left(img_file.name, prefix.size()) != prefix) {
                 if (step == 1) {
                     j = i;
                     step = -1;
@@ -95,7 +96,6 @@ from_images_and_camera_files(std::string const & path,
                     break;
                 }
             }
-            util::fs::File const & img_file = dir[j];
 
             /* Image file (based on extension)? */
             std::string img_file_ext = util::string::uppercase(util::string::right(img_file.name, 4));
